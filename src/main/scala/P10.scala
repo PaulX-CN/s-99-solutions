@@ -1,5 +1,7 @@
 package main.scala
 
+import P09.pack
+
 object P10 {
 
   def encode(a: List[Any]):List[(Int, Any)] = a match {
@@ -12,5 +14,9 @@ object P10 {
         case _ => curTuple :: encode(next)
       }
     }
+  }
+
+  def encodeByPack(a: List[Any]):List[(Int, Any)] = {
+    pack(a).map(ls => (ls.length, ls.head))
   }
 }
