@@ -36,4 +36,10 @@ class testP23NP24NP25P26 extends FlatSpec with Matchers with Retries {
     randomPermute(mockList).toSet should be(mockList.toSet)
   }
 
+  "combination" should "generate all combinations of n elements from a given list" in {
+    val mockList = List('a, 'b, 'c, 'd)
+    combination(4, mockList).toSet should be(Set(List('a, 'b), List('a, 'c), List('b, 'c),
+                                                  List('a, 'd), List('b, 'd), List('c, 'd)))
+  }
+
 }

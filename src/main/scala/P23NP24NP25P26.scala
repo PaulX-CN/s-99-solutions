@@ -34,6 +34,19 @@ object P23NP24NP25P26 {
     _permute(Nil, ls)
   }
 
+  def flatMapSublists[A,B](ls: List[A])(f: List[A] => List[B]): List[B] = ls match {
+    case Nil => Nil
+    case sublist@(_ :: tail) =>
+      println(sublist)
+      f(sublist) ::: flatMapSublists(tail)(f)
+  }
+
   def combination[A](n: Int, ls: List[A]): List[List[A]] = {
+    if (n<=0) List(Nil)
+    else flatMapSublists(ls){ sublist =>
+      combination(n-1, sublist.tail).map {
+        sublist.head :: _
+      }
+    }
   }
 }
