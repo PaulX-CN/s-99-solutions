@@ -17,7 +17,7 @@ object P02 {
 
     def penultimateHelper(zippedArray: List[(Any, Any)]): A = zippedArray match {
       case (last: A, None) :: _ => last
-      case (_: A, _: A) :: t    => penultimateHelper(t)
+      case (_, _) :: t    => penultimateHelper(t)
       case _                    => throw new NoSuchElementException
     }
 
