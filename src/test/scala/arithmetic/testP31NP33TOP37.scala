@@ -1,9 +1,9 @@
 package arithmetic
 
-import arithmetic.P31NP33NP34NP35._
+import arithmetic.P31NP33TOP37._
 import org.scalatest._
 
-class testP31NP33NP34NP35 extends FlatSpec with Matchers {
+class testP31NP33TOP37 extends FlatSpec with Matchers {
 
   "IntCheckPrime" should "implicitly convert integer to IntCheckPrime class" in {
     2.isPrime should be(true)
@@ -22,4 +22,13 @@ class testP31NP33NP34NP35 extends FlatSpec with Matchers {
     315.primeFactors should be(List(3, 3, 5, 7))
   }
 
+  "primeFactorsMul" should "return a map with prime factors as key and count of prime factors as value" in {
+    315.primeFactorsMul should be(Map(3 -> 2, 5 -> 1, 7 -> 1))
+    10.primeFactorsMul should be(Map(2 -> 1, 5 -> 1))
+  }
+
+  "totientImproved" should "return the number of positive integers r (1 <= r <= m) that are coprime to m." in {
+    10.totientImproved should be(4)
+    100.totientImproved should be(40)
+  }
 }
