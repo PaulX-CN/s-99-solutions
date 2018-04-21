@@ -31,5 +31,16 @@ object P31NP33NP34NP35 {
 
       _primeFactor(n, primes)
     }
+
+    def primeFactorMultiplicity: Map[Int, Int] = n.primeFactors.groupBy(x => x).mapValues(_.size)
+
+    def primeFactorMultiplicityDirect: Map[Int, Int] ={
+      def countFactor(n: Int, current: Int): Tuple2[Int, Int] = {
+        if (current % n != 0) (0, n)
+        else countFactor(n, current / n) match {case (count, factor) => (count+1, factor)}
+      }
+
+
+    }
   }
 }
