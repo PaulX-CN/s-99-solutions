@@ -1,6 +1,15 @@
 package arithmetic
 
-object P31NP33TOP37 {
+import scala.annotation.tailrec
+
+object P31NP33TOP37NP40 {
+
+  def loop(s: String, i: Int, iter: Iterator[Int]): Unit = {
+    // Stop after 200,000
+    if (i < 200001) {
+      loop(s, iter.next, iter)
+    }
+  }
 
   implicit class IntCheckPrime(n: Int) {
 
@@ -9,7 +18,9 @@ object P31NP33TOP37 {
     def isPrime: Boolean = (n > 1) && primes.takeWhile(_ <= Math.sqrt(n)).forall { n % _ != 0 }
 
     // Note filter is applied at the tail part. Otherwise 2.isPrime will cause infinite mutual recursive
-    private val primes = Stream.cons(2, Stream.from(3, 2).filter { _.isPrime })
+    // A important note is using val primes instead of def primes forces Scala to memorize the result of the stream as
+    // stream elements.
+    private val primes = 2 #:: Stream.from(3, 2).filter { _.isPrime }
 
     def isCoprimeTo(b: Int): Boolean = gcd(n, b) == 1
 
@@ -51,6 +62,24 @@ object P31NP33TOP37 {
           case (factor, count) =>
             prev * (factor - 1) * Math.pow(factor, count - 1).toInt
         }
+    }
+
+    def goldbach: (Int, Int) = {
+
+      @tailrec
+      def _primeSum(p: Stream[Int]): (Int, Int) = {
+        if ((n - p.head).isPrime) (p.head, n - p.head)
+        else _primeSum(p.tail)
+      }
+
+      _primeSum(primes.takeWhile(_ <= Math.sqrt(n)))
+    }
+
+    def goldbachByFind: (Int, Int) = {
+      primes.takeWhile(_ <= Math.sqrt(n)).find(p => (n - p).isPrime) match {
+        case None    => throw new NoSuchElementException
+        case Some(x) => (x, n - x)
+      }
     }
   }
 

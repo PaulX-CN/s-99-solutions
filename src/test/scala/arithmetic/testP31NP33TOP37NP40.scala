@@ -1,9 +1,9 @@
 package arithmetic
 
-import arithmetic.P31NP33TOP37._
+import arithmetic.P31NP33TOP37NP40._
 import org.scalatest._
 
-class testP31NP33TOP37 extends FlatSpec with Matchers {
+class testP31NP33TOP37NP40 extends FlatSpec with Matchers {
 
   "IntCheckPrime" should "implicitly convert integer to IntCheckPrime class" in {
     2.isPrime should be(true)
@@ -30,5 +30,10 @@ class testP31NP33TOP37 extends FlatSpec with Matchers {
   "totientImproved" should "return the number of positive integers r (1 <= r <= m) that are coprime to m." in {
     10.totientImproved should be(4)
     100.totientImproved should be(40)
+  }
+
+  "goldbach" should "return two prime numbers that sum up to a given even integer larger than 2." in {
+    28.goldbach should be((5, 23))
+    28.goldbachByFind should be((5, 23))
   }
 }
