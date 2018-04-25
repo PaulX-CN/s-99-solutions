@@ -80,11 +80,11 @@ object P31NP33TOP37NP40 {
         else _primeSum(p.tail)
       }
 
-      _primeSum(primes1.takeWhile(_ <= Math.sqrt(n)))
+      _primeSum(primes1.takeWhile(_ <= n/2))
     }
 
     def goldbachByFind: (Int, Int) = {
-      primes1.takeWhile(_ <= Math.sqrt(n)).find(p => (n - p).isPrime1) match {
+      primes1.takeWhile(_ <= n/2).find(p => (n - p).isPrime1) match {
         case None    => throw new NoSuchElementException
         case Some(x) => (x, n - x)
       }

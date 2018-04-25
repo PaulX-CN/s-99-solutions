@@ -47,7 +47,7 @@ class testP31NP33TOP37NP40 extends FlatSpec with Matchers {
   }
 
   "goldbach" should "return two prime numbers that sum up to a given even integer larger than 2." in {
-    28.goldbach should be((5, 23))
-    28.goldbachByFind should be((5, 23))
+    12.goldbach should be((5, 7))
+    12.goldbachByFind should be((5, 7))
   }
 }
