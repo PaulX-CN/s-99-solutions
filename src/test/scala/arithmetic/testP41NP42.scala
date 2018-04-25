@@ -4,7 +4,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import arithmetic.P41NP42._
 
 class testP41NP42 extends FlatSpec with Matchers {
-  
+
   "GoldbachList" should "return a list of all even numbers and their Goldbach composition " +
     "given a range of integers." in {
     goldbachList(9 to 20) should be(List((3,7), (5, 7), (3, 11), (3, 13), (5, 13), (3, 17)))
