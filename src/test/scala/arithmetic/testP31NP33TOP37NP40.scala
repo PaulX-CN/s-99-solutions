@@ -5,9 +5,23 @@ import org.scalatest._
 
 class testP31NP33TOP37NP40 extends FlatSpec with Matchers {
 
-  "IntCheckPrime" should "implicitly convert integer to IntCheckPrime class" in {
-    2.isPrime should be(true)
+  "isPrime" should "implicitly convert integer to IntExtension class" in {
+    2.isPrime1 should be(true)
+    2.isPrime2 should be(true)
   }
+
+//  about 1.5 milliseconds
+  "testPrime2" should "run the test on isPrime2" in {
+    val mockList = (90000 to 100000).toList
+    (1 to 3) foreach (x => mockList.map {n => n.isPrime2})
+  }
+
+//  about 1.2 milliseconds
+  "testPrime1" should "run the test on isPrime1" in {
+    val mockList = (90000 to 100000).toList
+    (1 to 3) foreach (x => mockList.map {n => n.isPrime1})
+  }
+
 
   "isCoPrime" should "return true if two integers' greatest common divisor equals 1" in {
     35.isCoprimeTo(64) should be(true)
