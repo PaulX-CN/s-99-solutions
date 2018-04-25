@@ -1,8 +1,9 @@
 package logic
 
-object P46 {
+object P46NP47 {
 
 
+  // a native approach. Removed implicit marker to avoid conflicts
    class BooleanExtensionNative(a: Boolean) {
 
     def and(b: Boolean):Boolean = a && b
