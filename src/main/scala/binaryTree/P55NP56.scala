@@ -1,19 +1,32 @@
 package binaryTree
 
-object P55 {
+object P55NP56 {
 
-  sealed abstract class Tree[+T]
+  sealed abstract class Tree[+T] {
+    def isSymmetric: Boolean
+  }
 
   case class Branch[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
     override def toString: String = "T(" + value.toString + " " + left.toString + " " + right.toString + ")"
+
+    override def isSymmetric: Boolean = isMutalMirror(left, right)
   }
 
   case object Leaf extends Tree[Nothing] {
     override def toString = "."
+
+    override def isSymmetric = true
   }
 
   object Branch {
     def apply[T](value: T): Branch[T] = new Branch(value, Leaf, Leaf)
+  }
+
+  def isMutalMirror[A](a: Tree[A], b: Tree[A]): Boolean = (a, b) match {
+    case (Leaf, Leaf) => true
+    case (Branch(_, aLeft, aRight), Branch(_, bLeft, bRight)) =>
+      isMutalMirror(aLeft, bRight) && isMutalMirror(aRight, bLeft)
+    case _ => false
   }
 
   object Tree {
@@ -27,6 +40,7 @@ object P55 {
         val subtree = cBalance(n / 2, v)
         subtree.flatMap { l => subtree.map { r => Branch(v, l, r) } }
     }
+
   }
 
 }
