@@ -1,9 +1,9 @@
 package arithmetic
 
 import org.scalatest.{FlatSpec, Matchers}
-import arithmetic.P41NP42._
+import arithmetic.P41nP42._
 
-class testP41NP42 extends FlatSpec with Matchers {
+class testP41nP42 extends FlatSpec with Matchers {
 
   "GoldbachList" should "return a list of all even numbers and their Goldbach composition " +
     "given a range of integers." in {

@@ -2,7 +2,7 @@ package arithmetic
 
 import scala.annotation.tailrec
 
-object P31NP33TOP37NP40 {
+object P31nP33toP37nP40 {
 
 
   implicit class IntExtension(n: Int) {

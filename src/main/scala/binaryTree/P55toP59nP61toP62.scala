@@ -1,6 +1,6 @@
 package binaryTree
 
-object P55TOP58 {
+object P55toP59nP61toP62 {
 
   sealed abstract class Tree[+T] {
     def isSymmetric: Boolean
@@ -13,6 +13,16 @@ object P55TOP58 {
       * @return new tree of provided type
       **/
     def addValue[U >: T](x: U)(implicit oc: U => Ordered[U]): Tree[U]
+
+    def nodeCount: Int
+
+    def leafCount: Int
+
+    def leafList: List[T]
+
+    def internalList: List[T]
+
+    def atLevel(n: Int): List[T]
   }
 
   case class Branch[+T](value: T, left: Tree[T], right: Tree[T]) extends Tree[T] {
@@ -25,6 +35,28 @@ object P55TOP58 {
       if (x >= value) Branch(value, left, right.addValue(x))
       else Branch(value, left.addValue(x), right)
     }
+
+    def nodeCount: Int = left.nodeCount + right.nodeCount + 1
+
+    def leafCount: Int = (left, right) match {
+      case (Leaf, Leaf) => 1
+      case _ => left.leafCount + right.leafCount
+    }
+
+    def leafList: List[T] = (left, right) match {
+      case (Leaf, Leaf) => List(value)
+      case _ => left.leafList ::: right.leafList
+    }
+
+    def internalList: List[T] = (left, right) match {
+      case (Leaf, Leaf) => Nil
+      case _ => value :: left.internalList ::: right.internalList
+    }
+
+    def atLevel(n: Int): List[T] = (left, right, n) match {
+      case (_, _, x) if x == 1 => List(value)
+      case _ => left.atLevel(n - 1) ::: right.atLevel(n - 1)
+    }
   }
 
   case object Leaf extends Tree[Nothing] {
@@ -33,6 +65,16 @@ object P55TOP58 {
     def isSymmetric = true
 
     def addValue[U >: Nothing](x: U)(implicit oc: U => Ordered[U]): Tree[U] = Branch(x)
+
+    def nodeCount = 0
+
+    def leafCount = 0
+
+    def leafList = Nil
+
+    def internalList = Nil
+
+    def atLevel(n: Int) = Nil
   }
 
   object Branch {
@@ -67,6 +109,26 @@ object P55TOP58 {
 
     def symmetricBalancedTrees[T](n: Int, c: T): List[Tree[T]] = {
       Tree.cBalance(n, c).filter(t => t.isSymmetric)
+    }
+
+    def hbalTress[T](n: Int, v: T): List[Tree[T]] = {
+      if (n == 0) List(Leaf)
+      else if (n == 1) List(Branch(v))
+      else {
+        val fullHeightTreeOneLevelLess = hbalTress(n - 1, v)
+        val shorterTreeTwoLevelLess = hbalTress(n - 2, v)
+        val completeBalancedTrees = for {
+          left <- fullHeightTreeOneLevelLess
+          right <- fullHeightTreeOneLevelLess
+        } yield Branch(v, left, right)
+        val almostBalancedTrees =
+          shorterTreeTwoLevelLess.flatMap { l =>
+            fullHeightTreeOneLevelLess.flatMap {
+              r => List(Branch(v, l, r), Branch(v, r, l))
+            }
+          }
+        completeBalancedTrees ::: almostBalancedTrees
+      }
     }
   }
 

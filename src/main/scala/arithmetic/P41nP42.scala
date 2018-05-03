@@ -1,8 +1,8 @@
 package arithmetic
 
-import P31NP33TOP37NP40._
+import P31nP33toP37nP40._
 
-object P41NP42 {
+object P41nP42 {
 
   def goldbachList(r: Range): List[(Int, Int)] ={
     goldbachListLimited(r, 0)

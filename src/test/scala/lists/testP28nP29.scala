@@ -3,7 +3,7 @@ package lists
 import lists.P28NP29._
 import org.scalatest._
 
-class testP28NP29 extends FlatSpec with Matchers {
+class testP28nP29 extends FlatSpec with Matchers {
 
   "lsort" should "sort a list by length of the item" in {
     val mockList = List(List('a, 'b, 'c), List('d, 'e), List('f, 'g, 'h), List('d, 'e), List('i, 'j, 'k, 'l),

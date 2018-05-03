@@ -1,6 +1,6 @@
 package logic
 
-object P46NP47 {
+object P46nP47 {
 
 
   // a native approach. Removed implicit marker to avoid conflicts

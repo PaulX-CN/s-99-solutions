@@ -1,10 +1,10 @@
 package lists
 
-import lists.P10NP11NP13._
+import lists.P10nP11nP13._
 import org.scalatest._
 
 
-class testP10NP11NP13 extends FlatSpec with Matchers {
+class testP10nP11nP13 extends FlatSpec with Matchers {
 
   "encode" should "pack all same items into subarray" in {
     val mockList = List('a, 'a, 'a, 'a, 'b, 'c, 'c, 'a, 'a, 'd, 'e, 'e, 'e, 'e)

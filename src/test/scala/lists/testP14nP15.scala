@@ -1,10 +1,10 @@
 package lists
 
-import lists.P14NP15._
+import lists.P14nP15._
 import org.scalatest._
 
 
-class testP14NP15 extends FlatSpec with Matchers {
+class testP14nP15 extends FlatSpec with Matchers {
 
   "duplicate" should "duplicate every item in a list" in {
     val mockList = List('a, 'b, 'c, 'c, 'd)

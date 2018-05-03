@@ -1,10 +1,10 @@
 package lists
 
-import lists.P23NP24NP25P26._
+import lists.P23toP26._
 import org.scalatest._
 import org.scalatest.tagobjects.Retryable
 
-class testP23NP24NP25P26 extends FlatSpec with Matchers with Retries {
+class testP23ToP26 extends FlatSpec with Matchers with Retries {
 
   val retries = 50
 

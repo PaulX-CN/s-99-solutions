@@ -1,9 +1,9 @@
 package arithmetic
 
-import arithmetic.P31NP33TOP37NP40._
+import arithmetic.P31nP33toP37nP40._
 import org.scalatest._
 
-class testP31NP33TOP37NP40 extends FlatSpec with Matchers {
+class testP31nP33ToP37nP40 extends FlatSpec with Matchers {
 
   "isPrime" should "implicitly convert integer to IntExtension class" in {
     2.isPrime1 should be(true)

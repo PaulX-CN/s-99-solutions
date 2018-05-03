@@ -6,7 +6,7 @@ import P22.rangeFunctional
 
 import scala.annotation.tailrec
 
-object P23NP24NP25P26 {
+object P23toP26 {
 
   def randomSelect[A](n: Int, ls: List[A]): List[A] = {
     if (n <= 0) Nil

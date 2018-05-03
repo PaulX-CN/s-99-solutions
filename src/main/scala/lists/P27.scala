@@ -2,7 +2,7 @@ package lists
 
 object P27 {
 
-  import P23NP24NP25P26.combination
+  import P23toP26.combination
 
   def group3[A](ls: List[A]): List[List[List[A]]] = {
     for {

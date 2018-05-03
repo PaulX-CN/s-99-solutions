@@ -1,6 +1,6 @@
 package lists
 
-object P14NP15 {
+object P14nP15 {
 
   def duplicate(a: List[Any]): List[Any] = {
     a.flatMap(e => List.fill(2)(e))
