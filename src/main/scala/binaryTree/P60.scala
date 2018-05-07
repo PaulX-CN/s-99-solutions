@@ -17,12 +17,12 @@ object P60 {
     else minHbalHeight(nodes / 2) + 1
   }
 
-  import P55toP59nP61toP62._
+  import P55toP59nP61toP66._
 
-  def hbalTreesWithNodes[T](nodes: Int, v: T): List[Tree[T]] = {
+  def hbalTreesWithNodes[T](nodes: Int, v: T): List[TreeExtension[T]] = {
     val maxH = maxHbalHeight(nodes)
     val minH = minHbalHeight(nodes)
 
-    (minH to maxH).flatMap(n => Tree.hbalTress(n, v)).filter(_.nodeCount == nodes).toList
+    (minH to maxH).flatMap(n => TreeExtension.hbalTress(n, v)).filter(_.nodeCount == nodes).toList
   }
 }
