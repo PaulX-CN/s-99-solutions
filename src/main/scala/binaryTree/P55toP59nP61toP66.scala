@@ -1,5 +1,7 @@
 package binaryTree
 
+import scala.util.matching.Regex
+
 object P55toP59nP61toP66 {
 
   sealed trait Tree[+T]
@@ -13,6 +15,9 @@ object P55toP59nP61toP66 {
     *
     **/
   sealed abstract class TreeExtension[+T] extends Tree[T] {
+
+    def toString2: String
+
     def isSymmetric: Boolean
 
     /** define abstract method to construct new binary tree by adding new item
@@ -23,6 +28,10 @@ object P55toP59nP61toP66 {
       * @return new tree of provided type
       * */
     def addValue[U >: T](x: U)(implicit oc: U => Ordered[U]): TreeExtension[U]
+
+    def depth: Int
+
+    def leftmostNodeDepth: Int
 
     def nodeCount: Int
 
@@ -38,17 +47,27 @@ object P55toP59nP61toP66 {
 
     def layoutBinaryTreeInternal(x: Int, depth: Int): (Tree[T], Int)
 
-    def layoutBinaryTree2: Tree[T] = layoutBinaryTreeInternal2(1, 1)._1
+    def layoutBinaryTree2: Tree[T] = {
 
-    def layoutBinaryTreeInternal2(x: Int, depth: Int): (Tree[T], Int)
+      // Tree depth
+      val d = depth
+      // Starting from left most tree, add the width all the way back up to the root
+      val x0 = (2 to leftmostNodeDepth).map(n => Math.pow(2, d - n).toInt).sum + 1
 
-    def layoutBinaryTree3: Tree[T] = layoutBinaryTreeInternal3(1, 1)._1
+      layoutBinaryTreeInternal2(x0, 1, d - 2)
+    }
 
-    def layoutBinaryTreeInternal3(x: Int, depth: Int): (Tree[T], Int, Int)
+    def layoutBinaryTreeInternal2(x: Int, depth: Int, exp: Int): Tree[T]
+
   }
 
   case class Branch[+T](value: T, left: TreeExtension[T], right: TreeExtension[T]) extends TreeExtension[T] {
     override def toString: String = "T(" + value.toString + " " + left.toString + " " + right.toString + ")"
+
+    def toString2: String = (left, right) match {
+      case (Leaf, Leaf) => s"$value"
+      case (_, _) => s"$value(${left.toString2},${right.toString2})"
+    }
 
     def isSymmetric: Boolean = isMutalMirror(left, right)
 
@@ -58,6 +77,10 @@ object P55toP59nP61toP66 {
     }
 
     def nodeCount: Int = left.nodeCount + right.nodeCount + 1
+
+    def depth: Int = (left.depth max right.depth) + 1
+
+    def leftmostNodeDepth: Int = left.leftmostNodeDepth + 1
 
     def leafCount: Int = (left, right) match {
       case (Leaf, Leaf) => 1
@@ -97,22 +120,21 @@ object P55toP59nP61toP66 {
       (PositionedBranch(value, leftTree, rightTree, currentX, depth), nextX)
     }
 
-    def layoutBinaryTreeInternal2(x: Int, depth: Int): (Tree[T], Int) = {
-      val (leftTree, currentX) = left.layoutBinaryTreeInternal2(x, depth + 1)
-      val (rightTree, nextX) = right.layoutBinaryTreeInternal2(currentX + math.pow(2, depth).toInt, depth + 1)
 
-      (PositionedBranch(value, leftTree, rightTree, currentX, depth), nextX)
-    }
-
-    def layoutBinaryTreeInternal3(x: Int, depth: Int): (Tree[T], Int, Int) = {
-      val (leftTree, currentX, leftLevelFromBottom) = left.layoutBinaryTreeInternal3(x, depth + 1)
-
-      //TODO: This is not supposed to be a recursive function! Need to get right tree level first.
-      val (rightTree, nextX, rightLevelFromBottom) =
-        right.layoutBinaryTreeInternal3(currentX + 2 * (leftLevelFromBottom min rightLevelFromBottom), depth + 1)
-
-      val currentLevelFromBottom = leftLevelFromBottom max rightLevelFromBottom
-      (PositionedBranch(value, leftTree, rightTree, currentX, depth), nextX, currentLevelFromBottom)
+    /** Given the starting depth and starting exponential (which is the total depth-2)
+      * to construct the tree
+      *
+      * @param x : current X for the node
+      * @param depth : starting depth which is the y axis
+      * @param exp : exponential number calculated from the total depth
+      *
+      **/
+    def layoutBinaryTreeInternal2(x: Int, depth: Int, exp: Int): Tree[T] = {
+      PositionedBranch(
+        value,
+        left.layoutBinaryTreeInternal2(x - Math.pow(2, exp).toInt, depth + 1, exp - 1),
+        right.layoutBinaryTreeInternal2(x + Math.pow(2, exp).toInt, depth + 1, exp - 1),
+        x, depth)
     }
 
   }
@@ -124,11 +146,17 @@ object P55toP59nP61toP66 {
   case object Leaf extends TreeExtension[Nothing] {
     override def toString = "."
 
+    def toString2: String = ""
+
     def isSymmetric = true
 
     def addValue[U >: Nothing](x: U)(implicit oc: U => Ordered[U]): TreeExtension[U] = Branch(x)
 
     def nodeCount = 0
+
+    def depth = 0
+
+    def leftmostNodeDepth: Int = 0
 
     def leafCount = 0
 
@@ -141,9 +169,8 @@ object P55toP59nP61toP66 {
     // Leaf does not use X so whatever X passed to Leaf just pass it back
     def layoutBinaryTreeInternal(x: Int, depth: Int): (Tree[Nothing], Int) = (Leaf, x)
 
-    def layoutBinaryTreeInternal2(x: Int, depth: Int): (Tree[Nothing], Int) = (Leaf, x)
+    def layoutBinaryTreeInternal2(x: Int, depth: Int, exp: Int): Tree[Nothing] = Leaf
 
-    def layoutBinaryTreeInternal3(x: Int, depth: Int): (Tree[Nothing], Int, Int) = (Leaf, x, 0)
   }
 
   object Branch {
@@ -161,6 +188,35 @@ object P55toP59nP61toP66 {
   }
 
   object TreeExtension {
+
+    def fromString(st: String): TreeExtension[Char] = {
+
+      /** Return three tree parts given a tree starting number in format of
+        * (leftTreeString, index of comma, rightTreeString)
+        *
+        * @param start : starting index of the 1st left bracket */
+      def findTreeParts(start: Int): (String, Int, String) = {
+
+        def findTreeEnds(pos: Int, nesting: Int, end: Char): Int =
+          if (st(pos) == end && nesting == 0) pos
+          else if (st(pos) == '(') findTreeEnds(pos + 1, nesting + 1, end)
+          else if (st(pos) == ')') findTreeEnds(pos + 1, nesting - 1, end)
+          else findTreeEnds(pos + 1, nesting, end)
+
+        val leftTreeEnd = findTreeEnds(start, 0, ',')
+        val rightTreeEnd = findTreeEnds(leftTreeEnd + 1, 0, ')')
+
+        (st.substring(start, leftTreeEnd), leftTreeEnd, st.substring(leftTreeEnd + 1, rightTreeEnd))
+      }
+
+      if (st.length == 0) Leaf
+      else if (st.length == 1) Branch(st(0))
+      else {
+        val (leftString, comma, rightString) = findTreeParts(2)
+        // Basic recursive
+        Branch(st(0), fromString(leftString), fromString(rightString))
+      }
+    }
 
     def cBalance[T](n: Int, v: T): List[TreeExtension[T]] = n match {
       case n if n == 0 => List(Leaf)

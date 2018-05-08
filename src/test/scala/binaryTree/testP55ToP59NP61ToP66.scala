@@ -77,12 +77,20 @@ class testP55ToP59NP61ToP66 extends FlatSpec with Matchers {
   }
 
   "layoutBinaryTree2" should "turns a tree of normal Nodes into a tree of PositionedNodes" in {
-    val mockTree = Branch('a', Branch('b', Leaf, Branch('c')), Branch('d'))
-    mockTree.layoutBinaryTree2.toString should be("T[3,1](a T[1,2](b . T[2,3](c . .)) T[5,2](d . .))")
+    val mockTree = TreeExtension.fromList(List('n', 'k', 'm', 'c', 'a', 'e', 'd', 'g', 'u', 'p', 'q'))
+    mockTree.layoutBinaryTree2.toString should be(
+      "T[[15,1](n T[7,2](k T[3,3](c T[1,4](a . .) T[5,4](e T[4,5](d . .) T[6,5](g . .))) T[11,3](m . .)) " +
+        "T[23,2](u T[19,3](p . T[21,4](q . .))] .))")
   }
 
-  "layoutBinaryTree3" should "turns a tree of normal Nodes into a tree of PositionedNodes" in {
-    val mockTree = Branch('a', Branch('b', Leaf, Branch('c')), Branch('d'))
-    mockTree.layoutBinaryTree3.toString should be("T[2,1](a T[1,2](b . T[2,3](c . .)) T[3,2](d . .))")
+  "toString2" should "create string in format node(left,right)" in {
+    val mockTree = Branch('a', Branch('b', Branch('d'), Branch('e')), Branch('c', Leaf, Branch('f', Branch('g'), Leaf)))
+    mockTree.toString2 should be("a(b(d,e),c(,f(g,)))")
+  }
+
+  "fromString" should "create a tree from the string" in {
+    TreeExtension.fromString("a(b(d,e),c(,f(g,)))").toString2 should be(
+      "a(b(d,e),c(,f(g,)))"
+    )
   }
 }
