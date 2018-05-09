@@ -18,6 +18,10 @@ object P55toP59nP61toP66 {
 
     def toString2: String
 
+    def preorder: List[T]
+
+    def inorder: List[T]
+
     def isSymmetric: Boolean
 
     /** define abstract method to construct new binary tree by adding new item
@@ -68,6 +72,10 @@ object P55toP59nP61toP66 {
       case (Leaf, Leaf) => s"$value"
       case (_, _) => s"$value(${left.toString2},${right.toString2})"
     }
+
+    def preorder: List[T] = value :: left.preorder ::: right.preorder
+
+    def inorder: List[T] = left.inorder :: value ::: right.inorder
 
     def isSymmetric: Boolean = isMutalMirror(left, right)
 
@@ -147,6 +155,10 @@ object P55toP59nP61toP66 {
     override def toString = "."
 
     def toString2: String = ""
+
+    def preorder = Nil
+
+    def inorder = Nil
 
     def isSymmetric = true
 
@@ -271,6 +283,14 @@ object P55toP59nP61toP66 {
 
       // Starting address is 1 for the root node
       generateTree(1)
+    }
+
+    def preInTree[T](pre: List[T], in: List[T]): TreeExtension[T] = pre match {
+      case Nil => Leaf
+      case h :: t =>
+        val (leftIn, rightIn) = in.span(_ != h)
+        Branch(h, preInTree(t.take(leftIn.length), leftIn),
+          preInTree(t.drop(leftIn.length), rightIn))
     }
   }
 
